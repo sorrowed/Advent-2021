@@ -15,7 +15,7 @@ pub fn part1() {
             .map(|a| a.parse::<i64>().unwrap())
             .collect(),
     );
-    println!("Descending : {}", m);
+    println!("Day 1 part 1 : Descending : {}", m);
 }
 
 pub fn part2() {
@@ -25,5 +25,5 @@ pub fn part2() {
             .map(|a| a.parse::<i64>().unwrap())
             .collect(),
     );
-    println!("Descending : {}", m);
+    println!("Day 1 part 2 : Descending : {}", m);
 }
