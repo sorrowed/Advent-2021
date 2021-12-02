@@ -1,0 +1,16 @@
+[package]
+name = "advent-2021"
+version = "0.1.0"
+authors = ["Tom Bulsink <t.bulsink@sorrowed.nl>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+regex = "1.4.2"
+itertools = ""
+text_io=""
+
+[[bin]]
+name = "advent-2021"
+path = "main.rs"
