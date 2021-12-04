@@ -2,7 +2,7 @@ mod common;
 
 mod day1;
 mod day2;
-// mod day3;
+mod day3;
 // mod day4;
 // mod day5;
 // mod day6;
@@ -22,8 +22,9 @@ fn main() {
     day2::part1();
     day2::part2();
 
-    // day3::part1();
-    // day3::part2();
+    day3::test();
+    day3::part1();
+    day3::part2();
 
     // day4::test();
     // day4::part1();
