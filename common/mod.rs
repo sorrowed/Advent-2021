@@ -33,11 +33,9 @@ impl Vector {
 }
 
 pub fn import(name: &str) -> Vec<String> {
-    let file = File::open(name).unwrap();
-    let reader = BufReader::new(file);
-    let mut vec = Vec::new();
-    for (_, line) in reader.lines().enumerate() {
-        vec.push(line.unwrap());
-    }
-    vec
+    fs::read_to_string(name)
+        .unwrap()
+        .split_terminator('\n')
+        .map(|s| s.to_string())
+        .collect()
 }
