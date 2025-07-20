@@ -1,0 +1,14 @@
+[package]
+name = "main"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+day1 = { path = "../days/day1" }
+day2 = { path = "../days/day2" }
+day3 = { path = "../days/day3" }
+day4 = { path = "../days/day4" }
+day5 = { path = "../days/day5" }
+day6 = { path = "../days/day6" }
+day7 = { path = "../days/day7" }
+day8 = { path = "../days/day8" }

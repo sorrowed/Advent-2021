@@ -68,8 +68,8 @@ impl PositionAndAim {
     }
 }
 
-pub fn part1() {
-    let movements = parse_movements("day2/input.txt");
+fn part1() {
+    let movements = parse_movements("days/day2/input.txt");
 
     let mut position = PositionAndAim::new();
     for movement in movements {
@@ -82,8 +82,8 @@ pub fn part1() {
     );
 }
 
-pub fn part2() {
-    let movements = parse_movements("day2/input.txt");
+fn part2() {
+    let movements = parse_movements("days/day2/input.txt");
 
     let mut position = PositionAndAim::new();
     for movement in movements {
@@ -94,4 +94,10 @@ pub fn part2() {
         "Day 2 part 2 : Horizontal * Depth : {}\n",
         position.horizontal * position.depth
     );
+}
+
+pub fn run()
+{
+    part1();
+    part2();
 }

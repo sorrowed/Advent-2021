@@ -1,4 +1,4 @@
-use crate::common::import;
+use common::import;
 
 fn rank(values: &Vec<String>, position: usize) -> i32 {
     values
@@ -65,40 +65,46 @@ fn bit_criteria(mut input: Vec<String>, ch: char) -> String {
     input[0].clone()
 }
 
-pub fn test() {
-    let a = vec![
-        "00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000", "11001",
-        "00010", "01010",
-    ]
-    .iter()
-    .map(|s| s.to_string())
-    .collect();
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    assert!(rank(&a, 0) > 0);
-    assert!(rank(&a, 1) < 0);
-    assert!(rank(&a, 2) > 0);
-    assert!(rank(&a, 3) > 0);
-    assert!(rank(&a, 4) < 0);
+    #[test]
+    fn test() {
+        let a = vec![
+            "00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000",
+            "11001", "00010", "01010",
+        ]
+        .iter()
+        .map(|s| s.to_string())
+        .collect();
 
-    let gamma = (0..5).fold("".to_string(), |mut g, position| {
-        g.push(to_char(rank(&a, position)));
-        g
-    });
-    assert_eq!(gamma, "10110");
-    let epsilon = invert(&gamma);
-    assert_eq!(epsilon, "01001");
+        assert!(rank(&a, 0) > 0);
+        assert!(rank(&a, 1) < 0);
+        assert!(rank(&a, 2) > 0);
+        assert!(rank(&a, 3) > 0);
+        assert!(rank(&a, 4) < 0);
 
-    let power = multiply_radix_2(&gamma, &epsilon);
-    assert_eq!(power, 198);
+        let gamma = (0..5).fold("".to_string(), |mut g, position| {
+            g.push(to_char(rank(&a, position)));
+            g
+        });
+        assert_eq!(gamma, "10110");
+        let epsilon = invert(&gamma);
+        assert_eq!(epsilon, "01001");
 
-    let o = bit_criteria(a.clone(), '1');
-    assert_eq!(o, "10111");
-    let c = bit_criteria(a.clone(), '0');
-    assert_eq!(c, "01010");
+        let power = multiply_radix_2(&gamma, &epsilon);
+        assert_eq!(power, 198);
+
+        let o = bit_criteria(a.clone(), '1');
+        assert_eq!(o, "10111");
+        let c = bit_criteria(a.clone(), '0');
+        assert_eq!(c, "01010");
+    }
 }
 
-pub fn part1() {
-    let input = import("day3/input.txt");
+fn part1() {
+    let input = import("days/day3/input.txt");
 
     let gamma = (0..12).fold("".to_string(), |mut g, position| {
         g.push(to_char(rank(&input, position)));
@@ -113,15 +119,20 @@ pub fn part1() {
     );
 }
 
-pub fn part2() {
-    let input = import("day3/input.txt");
+fn part2() {
+    let input = import("days/day3/input.txt");
 
     let o = bit_criteria(input.clone(), '1');
     let c = bit_criteria(input.clone(), '0');
-    let l = multiply_radix_2(&o,&c);
+    let l = multiply_radix_2(&o, &c);
 
     print!(
         "Day 3 part 2 : Oxygen rating: {} CO2 scrubber rating: {} Life support rating: {}\n",
         o, c, l
     );
+}
+
+pub fn run() {
+    part1();
+    part2();
 }

@@ -66,23 +66,7 @@ fn range(v: &Vec<i32>) -> std::ops::RangeInclusive<i32> {
     *v.iter().min().unwrap()..=*v.iter().max().unwrap()
 }
 
-pub fn test() {
-    let input = vec![16, 1, 2, 0, 4, 2, 7, 1, 2, 14];
-
-    let sums = range(&input).map(|n| input.iter().fold(0, |a, c| a + i32::abs(n - c)));
-
-    assert_eq!(sums.min().unwrap(), 37);
-
-    assert_eq!(termial(16 - 5), 66);
-    assert_eq!(termial(5 - 1), 10);
-    assert_eq!(termial(14 - 5), 45);
-
-    let sums = range(&input).map(|n| input.iter().fold(0, |a, c| a + termial(i32::abs(n - c))));
-
-    assert_eq!(sums.min().unwrap(), 168);
-}
-
-pub fn part1() {
+fn part1() {
     let crabs = input();
 
     let sums = range(&crabs).map(|n| crabs.iter().fold(0, |a, i| a + i32::abs(n - i)));
@@ -90,11 +74,38 @@ pub fn part1() {
     println!("Day 7 part 1 : Minimum fuel is {}", sums.min().unwrap());
 }
 
-pub fn part2() {
+fn part2() {
     let mut crabs = input();
     crabs.sort();
 
     let sums = range(&crabs).map(|n| crabs.iter().fold(0, |a, i| a + termial(i32::abs(n - i))));
 
     println!("Day 7 part 2 : Minimum fuel is {}", sums.min().unwrap());
+}
+
+pub fn run() {
+    part1();
+    part2();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let input = vec![16, 1, 2, 0, 4, 2, 7, 1, 2, 14];
+
+        let sums = range(&input).map(|n| input.iter().fold(0, |a, c| a + i32::abs(n - c)));
+
+        assert_eq!(sums.min().unwrap(), 37);
+
+        assert_eq!(termial(16 - 5), 66);
+        assert_eq!(termial(5 - 1), 10);
+        assert_eq!(termial(14 - 5), 45);
+
+        let sums = range(&input).map(|n| input.iter().fold(0, |a, c| a + termial(i32::abs(n - c))));
+
+        assert_eq!(sums.min().unwrap(), 168);
+    }
 }

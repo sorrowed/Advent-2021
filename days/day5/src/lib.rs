@@ -1,4 +1,3 @@
-use crate::common;
 use std::collections::HashMap;
 use std::str::FromStr;
 
@@ -123,36 +122,8 @@ fn print_map(top_left: &V, bottom_right: &V, map: &HashMap<V, i32>) {
     }
 }
 
-pub fn test() {
-    let input = vec![
-        "0,9 -> 5,9",
-        "8,0 -> 0,8",
-        "9,4 -> 3,4",
-        "2,2 -> 2,1",
-        "7,0 -> 7,4",
-        "6,4 -> 2,0",
-        "0,9 -> 2,9",
-        "3,4 -> 1,4",
-        "0,0 -> 8,8",
-        "5,5 -> 8,2",
-    ];
-
-    let lines = parse_lines(&input.iter().map(|s| s.to_string()).collect())
-        .into_iter()
-        .filter(|line| !line.is_diagonal())
-        .collect();
-
-    let map = build_map(&lines);
-    // print_map(&V::new(0, 0), &V::new(9, 9), &map);
-
-    assert_eq!(map[&V::new(0, 9)], 2);
-    assert_eq!(map[&V::new(1, 9)], 2);
-    assert_eq!(map[&V::new(2, 9)], 2);
-    assert_eq!(map[&V::new(3, 9)], 1);
-}
-
-pub fn part1() {
-    let lines = parse_lines(&common::import("day5/input.txt"))
+fn part1() {
+    let lines = parse_lines(&common::import("days/day5/input.txt"))
         .into_iter()
         .filter(|line| !line.is_diagonal())
         .collect();
@@ -165,8 +136,8 @@ pub fn part1() {
     );
 }
 
-pub fn part2() {
-    let lines = parse_lines(&common::import("day5/input.txt"));
+fn part2() {
+    let lines = parse_lines(&common::import("days/day5/input.txt"));
 
     let map = build_map(&lines);
 
@@ -174,4 +145,43 @@ pub fn part2() {
         "Day 5 part 2 : {} positions with 2 or more lines\n",
         map.values().filter(|&c| c >= &2).count()
     );
+}
+
+pub fn run() {
+    part1();
+    part2();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let input = vec![
+            "0,9 -> 5,9",
+            "8,0 -> 0,8",
+            "9,4 -> 3,4",
+            "2,2 -> 2,1",
+            "7,0 -> 7,4",
+            "6,4 -> 2,0",
+            "0,9 -> 2,9",
+            "3,4 -> 1,4",
+            "0,0 -> 8,8",
+            "5,5 -> 8,2",
+        ];
+
+        let lines = parse_lines(&input.iter().map(|s| s.to_string()).collect())
+            .into_iter()
+            .filter(|line| !line.is_diagonal())
+            .collect();
+
+        let map = build_map(&lines);
+        // print_map(&V::new(0, 0), &V::new(9, 9), &map);
+
+        assert_eq!(map[&V::new(0, 9)], 2);
+        assert_eq!(map[&V::new(1, 9)], 2);
+        assert_eq!(map[&V::new(2, 9)], 2);
+        assert_eq!(map[&V::new(3, 9)], 1);
+    }
 }

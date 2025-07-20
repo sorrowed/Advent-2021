@@ -27,16 +27,6 @@ fn make_map(fish: &Vec<i64>) -> HashMap<i64, i64> {
     r
 }
 
-pub fn test() {
-    let mut fish = make_map(&vec![3, 4, 3, 1, 2]);
-
-    for _ in 0..80 {
-        //print!("{} --> {:?}\n", d, fish);
-        fish = generation(&fish);
-    }
-    assert_eq!(fish.values().fold(0, |a, &v| a + v), 5934);
-}
-
 fn input() -> Vec<i64> {
     vec![
         1, 1, 1, 2, 1, 5, 1, 1, 2, 1, 4, 1, 4, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1, 4, 1, 1, 5, 1, 3,
@@ -52,7 +42,7 @@ fn input() -> Vec<i64> {
     ]
 }
 
-pub fn part1() {
+fn part1() {
     let mut fish = make_map(&input());
 
     for _ in 0..80 {
@@ -65,7 +55,7 @@ pub fn part1() {
     );
 }
 
-pub fn part2() {
+fn part2() {
     let mut fish = make_map(&input());
 
     for _ in 0..256 {
@@ -76,4 +66,25 @@ pub fn part2() {
         "Day 6 part 2 : After 256 days there are {} lanterfish\n",
         fish.values().fold(0, |a, &v| a + v)
     );
+}
+
+pub fn run() {
+    part1();
+    part2();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let mut fish = make_map(&vec![3, 4, 3, 1, 2]);
+
+        for _ in 0..80 {
+            //print!("{} --> {:?}\n", d, fish);
+            fish = generation(&fish);
+        }
+        assert_eq!(fish.values().fold(0, |a, &v| a + v), 5934);
+    }
 }

@@ -123,7 +123,7 @@ fn draws() -> Vec<i32> {
 }
 
 fn boards() -> Vec<Board> {
-    let lines = fs::read_to_string("day4/input.txt").unwrap();
+    let lines = fs::read_to_string("days/day4/input.txt").unwrap();
 
     lines
         .split("\n\n")
@@ -138,7 +138,6 @@ fn boards() -> Vec<Board> {
 
 fn play_boards(draws: &Vec<i32>, boards: &mut Vec<Board>) {
     for (round, &draw) in draws.iter().enumerate() {
-
         for board in boards.iter_mut() {
             if !board.is_finished() {
                 if board.draw(draw) {
@@ -153,36 +152,18 @@ fn play_boards(draws: &Vec<i32>, boards: &mut Vec<Board>) {
     }
 }
 
-pub fn test() {
-    let draws = vec![
-        7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24, 10, 16, 13, 6, 15, 25, 12, 22, 18, 20, 8, 19, 3,
-        26, 1,
-    ];
-
-    let mut board = Board::new(&vec![
-        14, 21, 17, 24, 4, 10, 16, 15, 9, 19, 18, 8, 23, 26, 20, 22, 11, 13, 6, 5, 2, 0, 12, 3, 7,
-    ]);
-
-    for (round, &draw) in draws.iter().enumerate() {
-        if board.draw(draw) {
-            board.finish(round as i32 + 1, draw);
-            assert_eq!(draw, 24);
-            assert_eq!(round + 1, 12);
-            assert_eq!(board.score(), 4512);
-
-            break;
-        }
-    }
-}
-
 pub fn part1() {
     let mut boards = boards();
 
     play_boards(&draws(), &mut boards);
 
-    boards.sort_by(|a,b| a.round.cmp(&b.round) );
+    boards.sort_by(|a, b| a.round.cmp(&b.round));
 
-    print!("Day 4 part 1 : Board won in round {} with score {}\n", boards[0].round, boards[0].score());
+    print!(
+        "Day 4 part 1 : Board won in round {} with score {}\n",
+        boards[0].round,
+        boards[0].score()
+    );
 }
 
 pub fn part2() {
@@ -190,7 +171,45 @@ pub fn part2() {
 
     play_boards(&draws(), &mut boards);
 
-    boards.sort_by(|a,b| b.round.cmp(&a.round) );
+    boards.sort_by(|a, b| b.round.cmp(&a.round));
 
-    print!("Day 4 part 2 : Last board complete in round {} with score {}\n", boards[0].round, boards[0].score());
+    print!(
+        "Day 4 part 2 : Last board complete in round {} with score {}\n",
+        boards[0].round,
+        boards[0].score()
+    );
+}
+
+pub fn run() {
+    part1();
+    part2();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let draws = vec![
+            7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24, 10, 16, 13, 6, 15, 25, 12, 22, 18, 20, 8, 19,
+            3, 26, 1,
+        ];
+
+        let mut board = Board::new(&vec![
+            14, 21, 17, 24, 4, 10, 16, 15, 9, 19, 18, 8, 23, 26, 20, 22, 11, 13, 6, 5, 2, 0, 12, 3,
+            7,
+        ]);
+
+        for (round, &draw) in draws.iter().enumerate() {
+            if board.draw(draw) {
+                board.finish(round as i32 + 1, draw);
+                assert_eq!(draw, 24);
+                assert_eq!(round + 1, 12);
+                assert_eq!(board.score(), 4512);
+
+                break;
+            }
+        }
+    }
 }
