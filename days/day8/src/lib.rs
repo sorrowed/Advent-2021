@@ -1,5 +1,10 @@
 use itertools::Itertools;
-use std::{collections::HashMap, fs::File, io::{BufRead, BufReader}, str::FromStr};
+use std::{
+    collections::HashMap,
+    fs::File,
+    io::{BufRead, BufReader},
+    str::FromStr,
+};
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, PartialOrd, Ord, Eq, PartialEq)]
@@ -208,16 +213,18 @@ fn part1() {
 }
 
 fn part2() {
-    let reader = BufReader::new(File::open("days/day8/input.txt").expect("Failed to open input file"));
+    let reader =
+        BufReader::new(File::open("days/day8/input.txt").expect("Failed to open input file"));
 
-    let s = reader.lines()
+    let s = reader
+        .lines()
         .filter_map(|line| brute_force(&line.expect("OMG")))
         .map(|r| concatenate_integers(&r))
         .sum::<i32>();
-    
+
     assert_eq!(s, 973292);
 
-    println!("Day 8 part 2 : {}", s);
+    println!("Day 8 part 2 : Sum of output values: {}", s);
 }
 
 pub fn run() {

@@ -8,21 +8,21 @@ pub fn import(name: &str) -> Vec<String> {
         .collect()
 }
 
-#[derive(PartialEq, Eq, Hash)]
-pub struct Vector<T> {
+#[derive(PartialEq, Eq, Hash, Clone, Copy)]
+pub struct Position<T> {
     pub x: T,
     pub y: T,
     pub z: T,
 }
 
-impl<T> Vector<T>
+impl<T> Position<T>
 where
     T: num::Signed,
     T: core::ops::Sub,
     T: Copy,
 {
-    pub fn new(x: T, y: T, z: T) -> Vector<T> {
-        Vector { x: x, y: y, z: z }
+    pub fn new(x: T, y: T, z: T) -> Position<T> {
+        Position { x: x, y: y, z: z }
     }
 
     pub fn manhattan(&self, other: &Self) -> T {
