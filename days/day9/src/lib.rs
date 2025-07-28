@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use common::Position;
+use common::Coordinate;
 use itertools::Itertools;
 
 struct LowPoint {
@@ -14,7 +14,7 @@ impl LowPoint {
 }
 
 struct HeightMap {
-    locations: HashMap<Position<i32>, u32>,
+    locations: HashMap<Coordinate<i32>, u32>,
 }
 
 impl HeightMap {
@@ -26,7 +26,7 @@ impl HeightMap {
                 .flat_map(|(y, line)| {
                     line.chars().enumerate().map(move |(x, c)| {
                         (
-                            Position::new(x as i32, y as i32, 0),
+                            Coordinate::new(x as i32, y as i32, 0),
                             c.to_digit(10).expect("Input is not a digit"),
                         )
                     })
@@ -35,7 +35,7 @@ impl HeightMap {
         }
     }
 
-    pub fn neighbors(&self, p: &Position<i32>) -> Vec<(Position<i32>, u32)> {
+    pub fn neighbors(&self, p: &Coordinate<i32>) -> Vec<(Coordinate<i32>, u32)> {
         self.locations
             .iter()
             .filter_map(|(kn, kv)| {
@@ -48,7 +48,7 @@ impl HeightMap {
             .collect::<Vec<_>>()
     }
 
-    pub fn low_points(&self) -> Vec<(Position<i32>, LowPoint)> {
+    pub fn low_points(&self) -> Vec<(Coordinate<i32>, LowPoint)> {
         self.locations
             .iter()
             .filter(|(kc, vc)| {
@@ -61,8 +61,8 @@ impl HeightMap {
 
     pub fn determine_basins(
         &self,
-        low_points: &Vec<(Position<i32>, LowPoint)>,
-    ) -> Vec<HashMap<Position<i32>, u32>> {
+        low_points: &Vec<(Coordinate<i32>, LowPoint)>,
+    ) -> Vec<HashMap<Coordinate<i32>, u32>> {
         let mut basins = vec![];
 
         for low_point in low_points.iter() {
@@ -75,7 +75,7 @@ impl HeightMap {
         basins
     }
 
-    fn drill(&self, basin: &mut HashMap<Position<i32>, u32>, current: (Position<i32>, u32)) {
+    fn drill(&self, basin: &mut HashMap<Coordinate<i32>, u32>, current: (Coordinate<i32>, u32)) {
         let neighbors = self.neighbors(&current.0);
 
         for neighbor in neighbors {
@@ -90,7 +90,7 @@ impl HeightMap {
         }
     }
 
-    pub fn basin_size(&self, basins: &Vec<HashMap<Position<i32>, u32>>) -> usize {
+    pub fn basin_size(&self, basins: &Vec<HashMap<Coordinate<i32>, u32>>) -> usize {
         basins
             .iter()
             .sorted_by_key(|basin| basin.len())
@@ -103,11 +103,7 @@ impl HeightMap {
 fn part1() {
     let s = std::fs::read_to_string("days/day9/input.txt").unwrap();
 
-    let map = HeightMap::parse(
-        s.split_terminator('\n')
-            .collect::<Vec<_>>()
-            .as_slice(),
-    );
+    let map = HeightMap::parse(s.split_terminator('\n').collect::<Vec<_>>().as_slice());
 
     let low_points = map.low_points();
 
@@ -119,11 +115,7 @@ fn part1() {
 fn part2() {
     let s = std::fs::read_to_string("days/day9/input.txt").unwrap();
 
-    let map = HeightMap::parse(
-        s.split_terminator('\n')
-            .collect::<Vec<_>>()
-            .as_slice(),
-    );
+    let map = HeightMap::parse(s.split_terminator('\n').collect::<Vec<_>>().as_slice());
 
     let low_points = map.low_points();
 

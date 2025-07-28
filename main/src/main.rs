@@ -9,4 +9,5 @@ fn main() {
     day8::run();
     day9::run();
     day10::run();
+    day11::run();
 }
