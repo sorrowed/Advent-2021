@@ -38,7 +38,7 @@ impl TryFrom<char> for Segment {
 }
 
 fn segment_permutations_lookup() -> Vec<HashMap<char, char>> {
-    let segments = vec!['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+    let segments = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
 
     segments
         .iter()
@@ -85,7 +85,7 @@ impl Segments {
         }
     }
 
-    pub fn to_digits(segments: &Vec<Segments>) -> Vec<i32> {
+    pub fn to_digits(segments: &[Segments]) -> Vec<i32> {
         segments
             .iter()
             .filter_map(|p| p.to_digit())
@@ -136,14 +136,11 @@ struct ParseEntryError {
 
 impl ParseEntryError {
     pub fn new(msg: String) -> ParseEntryError {
-        ParseEntryError { msg: msg }
+        ParseEntryError { msg }
     }
 }
 fn parse_segments(input: &str) -> Vec<Segments> {
-    input
-        .split_whitespace()
-        .map(|s| Segments::from(s))
-        .collect()
+    input.split_whitespace().map(Segments::from).collect()
 }
 
 impl FromStr for Entry {
@@ -196,7 +193,7 @@ fn count_unique(input: &[&str]) -> usize {
                 .filter(|n| n.has_unique_number_of_segments())
                 .count()
         })
-        .fold(0, |a, i| a + i)
+        .sum()
 }
 
 fn concatenate_integers(input: &[i32]) -> i32 {

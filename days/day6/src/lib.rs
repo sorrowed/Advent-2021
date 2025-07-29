@@ -46,12 +46,12 @@ fn part1() {
     let mut fish = make_map(&input());
 
     for _ in 0..80 {
-        fish = generation(&mut fish);
+        fish = generation(&fish);
     }
 
-    print!(
-        "Day 6 part 1 : After 80 days there are {} lanterfish\n",
-        fish.values().fold(0, |a, &v| a + v)
+    println!(
+        "Day 6 part 1 : After 80 days there are {} lanterfish",
+        fish.values().sum::<i64>()
     );
 }
 
@@ -59,12 +59,12 @@ fn part2() {
     let mut fish = make_map(&input());
 
     for _ in 0..256 {
-        fish = generation(&mut fish);
+        fish = generation(&fish);
     }
 
-    print!(
-        "Day 6 part 2 : After 256 days there are {} lanterfish\n",
-        fish.values().fold(0, |a, &v| a + v)
+    println!(
+        "Day 6 part 2 : After 256 days there are {} lanterfish",
+        fish.values().sum::<i64>()
     );
 }
 

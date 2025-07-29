@@ -76,8 +76,8 @@ fn part1() {
         position.apply_one(&movement);
     }
 
-    print!(
-        "Day 2 part 1 : Horizontal * Depth : {}\n",
+    println!(
+        "Day 2 part 1 : Horizontal * Depth : {}",
         position.horizontal * position.depth
     );
 }
@@ -90,8 +90,8 @@ fn part2() {
         position.apply_two(&movement);
     }
 
-    print!(
-        "Day 2 part 2 : Horizontal * Depth : {}\n",
+    println!(
+        "Day 2 part 2 : Horizontal * Depth : {}",
         position.horizontal * position.depth
     );
 }

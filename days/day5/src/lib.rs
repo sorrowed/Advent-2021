@@ -9,7 +9,7 @@ struct V {
 
 impl V {
     fn new(x: i32, y: i32) -> V {
-        V { x: x, y: y }
+        V { x, y }
     }
 }
 
@@ -71,7 +71,7 @@ impl Line {
         let mut x = self.begin.x;
         let mut y = self.begin.y;
         while between(x, self.begin.x, self.end.x) && between(y, self.begin.y, self.end.y) {
-            r.push(V { x: x, y: y });
+            r.push(V { x, y });
             x += x_step;
             y += y_step;
         }
@@ -92,7 +92,7 @@ impl FromStr for Line {
     }
 }
 
-fn parse_lines(input: &Vec<String>) -> Vec<Line> {
+fn parse_lines(input: &[String]) -> Vec<Line> {
     input.iter().map(|line| line.parse().unwrap()).collect()
 }
 
@@ -130,8 +130,8 @@ fn part1() {
 
     let map = build_map(&lines);
 
-    print!(
-        "Day 5 part 1 : {} positions with 2 or more lines\n",
+    println!(
+        "Day 5 part 1 : {} positions with 2 or more lines",
         map.values().filter(|&c| c >= &2).count()
     );
 }
@@ -141,8 +141,8 @@ fn part2() {
 
     let map = build_map(&lines);
 
-    print!(
-        "Day 5 part 2 : {} positions with 2 or more lines\n",
+    println!(
+        "Day 5 part 2 : {} positions with 2 or more lines",
         map.values().filter(|&c| c >= &2).count()
     );
 }
@@ -158,7 +158,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let input = vec![
+        let input = [
             "0,9 -> 5,9",
             "8,0 -> 0,8",
             "9,4 -> 3,4",
@@ -169,9 +169,12 @@ mod tests {
             "3,4 -> 1,4",
             "0,0 -> 8,8",
             "5,5 -> 8,2",
-        ];
+        ]
+        .iter()
+        .map(|&s| s.into())
+        .collect::<Vec<_>>();
 
-        let lines = parse_lines(&input.iter().map(|s| s.to_string()).collect())
+        let lines = parse_lines(&input)
             .into_iter()
             .filter(|line| !line.is_diagonal())
             .collect();

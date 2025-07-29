@@ -39,7 +39,7 @@ impl HeightMap {
         self.locations
             .iter()
             .filter_map(|(kn, kv)| {
-                if p.manhattan(&kn) == 1 {
+                if p.manhattan(kn) == 1 {
                     Some((*kn, *kv))
                 } else {
                     None
@@ -61,7 +61,7 @@ impl HeightMap {
 
     pub fn determine_basins(
         &self,
-        low_points: &Vec<(Coordinate<i32>, LowPoint)>,
+        low_points: &[(Coordinate<i32>, LowPoint)],
     ) -> Vec<HashMap<Coordinate<i32>, u32>> {
         let mut basins = vec![];
 
@@ -80,8 +80,8 @@ impl HeightMap {
 
         for neighbor in neighbors {
             if neighbor.1 < 9 && neighbor.1 > current.1 {
-                if !basin.contains_key(&neighbor.0) {
-                    basin.insert(neighbor.0, neighbor.1);
+                if let std::collections::hash_map::Entry::Vacant(e) = basin.entry(neighbor.0) {
+                    e.insert(neighbor.1);
 
                     //  Do the same for neighbor..
                     self.drill(basin, neighbor);
@@ -90,7 +90,7 @@ impl HeightMap {
         }
     }
 
-    pub fn basin_size(&self, basins: &Vec<HashMap<Coordinate<i32>, u32>>) -> usize {
+    pub fn basin_size(&self, basins: &[HashMap<Coordinate<i32>, u32>]) -> usize {
         basins
             .iter()
             .sorted_by_key(|basin| basin.len())

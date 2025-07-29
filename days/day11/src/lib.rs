@@ -1,70 +1,10 @@
-use std::{collections::HashMap, thread::sleep, time::Duration};
+use std::collections::HashMap;
 
-use common::Coordinate;
+use common::{enumerate_xy, extends, neighbors, Coordinate};
 
-pub fn enumerate_xy<F, V>(input: &[&str], f: &F) -> HashMap<Coordinate<i64>, V>
-where
-    F: Fn(i64, i64, char) -> V,
-{
-    input
-        .iter()
-        .enumerate()
-        .flat_map(|(y, line)| {
-            line.chars().enumerate().map(move |(x, c)| {
-                (
-                    Coordinate::new(x as i64, y as i64, 0),
-                    f(x as i64, y as i64, c),
-                )
-            })
-        })
-        .collect()
-}
+type Map = HashMap<Coordinate<i64>, Octopus>;
 
-pub fn extends<I, T>(mut iter: I) -> (Coordinate<T>, Coordinate<T>)
-where
-    I: Iterator<Item = Coordinate<T>>,
-    T: Copy,
-    T: std::cmp::PartialOrd,
-{
-    let mut tl = iter.next().expect("Empty coordinate collection");
-    let mut br = tl;
-
-    for i in iter {
-        if i.x < tl.x {
-            tl.x = i.x
-        }
-        if i.x > br.x {
-            br.x = i.x
-        }
-        if i.y < tl.y {
-            tl.y = i.y
-        }
-        if i.y > br.y {
-            br.y = i.y
-        }
-    }
-    (tl, br)
-}
-
-pub fn neighbors(
-    location: &Coordinate<i64>,
-    extends: &(Coordinate<i64>, Coordinate<i64>),
-) -> Vec<Coordinate<i64>> {
-    let mut result = vec![];
-
-    for x in -1..=1 {
-        for y in -1..=1 {
-            let neighbor = location.offset(x, y, 0);
-
-            if neighbor.is_inside(&extends.0, &extends.1) {
-                result.push(neighbor);
-            }
-        }
-    }
-    result
-}
-
-fn step_map(map: &mut HashMap<Coordinate<i64>, Octopus>) -> usize {
+fn step_map(map: &mut Map) -> usize {
     let mut result = 0;
 
     let extends = extends(map.keys().copied());
@@ -79,7 +19,7 @@ fn step_map(map: &mut HashMap<Coordinate<i64>, Octopus>) -> usize {
             .iter()
             .filter_map(|(position, octopus)| {
                 if !octopus.flashed && octopus.energy_level > 9 {
-                    Some(position.clone())
+                    Some(*position)
                 } else {
                     None
                 }
@@ -89,7 +29,7 @@ fn step_map(map: &mut HashMap<Coordinate<i64>, Octopus>) -> usize {
         result += flashes.len();
 
         // D: repeat for as long as octopuses keep flashing
-        if flashes.len() == 0 {
+        if flashes.is_empty() {
             break;
         }
 
@@ -117,7 +57,7 @@ fn step_map(map: &mut HashMap<Coordinate<i64>, Octopus>) -> usize {
     result
 }
 
-fn print_map(map: &HashMap<Coordinate<i64>, Octopus>) {
+fn print_map(map: &Map) {
     let extends = extends(map.keys().copied());
     for y in extends.0.y..=extends.1.y {
         for x in extends.0.x..=extends.1.x {
@@ -145,7 +85,7 @@ fn part1() {
     });
 
     let mut flashed = 0;
-    for steps in 1..=100 {
+    for _ in 1..=100 {
         flashed += step_map(&mut map);
 
         // println!(

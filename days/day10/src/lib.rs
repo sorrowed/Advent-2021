@@ -79,7 +79,7 @@ fn collect_autocomplete_line(input: &str) -> Option<Vec<char>> {
 
     // Replace all lines with their closing sequence of characters
     stack.reverse();
-    Some(stack.into_iter().map(|c| matching_brace(c)).collect())
+    Some(stack.into_iter().map(matching_brace).collect())
 }
 
 fn part1() {
@@ -102,7 +102,7 @@ fn part2() {
             autocomplete.push(ac);
         }
     }
-    autocomplete.sort_by(|a, b| total_autocomplete_score(a).cmp(&total_autocomplete_score(b)));
+    autocomplete.sort_by_key(|a| total_autocomplete_score(a));
 
     println!(
         "Day 10 part 2 : Middle autocomplete score {}",

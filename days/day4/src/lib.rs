@@ -9,7 +9,7 @@ struct Loc {
 
 impl Loc {
     fn new(n: i32) -> Loc {
-        Loc { n: n, m: false }
+        Loc { n, m: false }
     }
 }
 
@@ -22,7 +22,7 @@ struct Board {
 }
 
 impl Board {
-    fn new(numbers: &Vec<i32>) -> Board {
+    fn new(numbers: &[i32]) -> Board {
         Board {
             rows: Self::select_rows(numbers),
             columns: Self::select_columns(numbers),
@@ -31,29 +31,29 @@ impl Board {
         }
     }
 
-    fn select_rows(numbers: &Vec<i32>) -> Vec<Vec<Loc>> {
+    fn select_rows(numbers: &[i32]) -> Vec<Vec<Loc>> {
         (0..5)
             .map(|i| {
                 numbers
                     .iter()
-                    .map(|&n| n)
+                    .copied()
                     .skip(i * 5)
                     .take(5)
-                    .map(|n| Loc::new(n))
+                    .map(Loc::new)
                     .collect()
             })
             .collect()
     }
 
-    fn select_columns(numbers: &Vec<i32>) -> Vec<Vec<Loc>> {
+    fn select_columns(numbers: &[i32]) -> Vec<Vec<Loc>> {
         (0..5)
             .map(|i| {
                 numbers
                     .iter()
-                    .map(|&n| n)
+                    .copied()
                     .skip(i)
                     .step_by(5)
-                    .map(|n| Loc::new(n))
+                    .map(Loc::new)
                     .collect()
             })
             .collect()
@@ -74,19 +74,19 @@ impl Board {
         self.is_winner()
     }
 
-    fn is_winning_line(line: &Vec<Loc>) -> bool {
+    fn is_winning_line(line: &[Loc]) -> bool {
         line.iter().all(|l| l.m)
     }
 
     fn is_winner(&self) -> bool {
-        self.rows.iter().any(|row| Self::is_winning_line(&row))
+        self.rows.iter().any(|row| Self::is_winning_line(row))
             || self
                 .columns
                 .iter()
-                .any(|column| Self::is_winning_line(&column))
+                .any(|column| Self::is_winning_line(column))
     }
 
-    fn unselected(&self, source: &Vec<Vec<Loc>>) -> HashSet<i32> {
+    fn unselected(&self, source: &[Vec<Loc>]) -> HashSet<i32> {
         source
             .iter()
             .flat_map(|row| row.iter())
@@ -100,7 +100,7 @@ impl Board {
 
         r.extend(self.unselected(&self.columns));
 
-        self.last_draw * r.iter().fold(0, |a, n| a + n)
+        self.last_draw * r.iter().sum::<i32>()
     }
 
     fn finish(&mut self, round: i32, last_draw: i32) {
@@ -113,13 +113,13 @@ impl Board {
 }
 
 fn draws() -> Vec<i32> {
-    return vec![
+    vec![
         31, 88, 35, 24, 46, 48, 95, 42, 18, 43, 71, 32, 92, 62, 97, 63, 50, 2, 60, 58, 74, 66, 15,
         87, 57, 34, 14, 3, 54, 93, 75, 22, 45, 10, 56, 12, 83, 30, 8, 76, 1, 78, 82, 39, 98, 37,
         19, 26, 81, 64, 55, 41, 16, 4, 72, 5, 52, 80, 84, 67, 21, 86, 23, 91, 0, 68, 36, 13, 44,
         20, 69, 40, 90, 96, 27, 77, 38, 49, 94, 47, 9, 65, 28, 59, 79, 6, 29, 61, 53, 11, 17, 73,
         99, 25, 89, 51, 7, 33, 85, 70,
-    ];
+    ]
 }
 
 fn boards() -> Vec<Board> {
@@ -136,13 +136,11 @@ fn boards() -> Vec<Board> {
         .collect()
 }
 
-fn play_boards(draws: &Vec<i32>, boards: &mut Vec<Board>) {
+fn play_boards(draws: &[i32], boards: &mut [Board]) {
     for (round, &draw) in draws.iter().enumerate() {
         for board in boards.iter_mut() {
-            if !board.is_finished() {
-                if board.draw(draw) {
-                    board.finish(round as i32 + 1, draw);
-                }
+            if !board.is_finished() && board.draw(draw) {
+                board.finish(round as i32 + 1, draw);
             }
         }
 
@@ -159,8 +157,8 @@ pub fn part1() {
 
     boards.sort_by(|a, b| a.round.cmp(&b.round));
 
-    print!(
-        "Day 4 part 1 : Board won in round {} with score {}\n",
+    println!(
+        "Day 4 part 1 : Board won in round {} with score {}",
         boards[0].round,
         boards[0].score()
     );
@@ -173,8 +171,8 @@ pub fn part2() {
 
     boards.sort_by(|a, b| b.round.cmp(&a.round));
 
-    print!(
-        "Day 4 part 2 : Last board complete in round {} with score {}\n",
+    println!(
+        "Day 4 part 2 : Last board complete in round {} with score {}",
         boards[0].round,
         boards[0].score()
     );

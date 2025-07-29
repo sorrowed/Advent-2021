@@ -1,6 +1,6 @@
 use common::import;
 
-fn rank(values: &Vec<String>, position: usize) -> i32 {
+fn rank(values: &[String], position: usize) -> i32 {
     values
         .iter()
         .fold(0, |a, i| match i.chars().nth(position).unwrap() {
@@ -20,7 +20,7 @@ fn to_char(rank: i32) -> char {
     }
 }
 
-fn invert(value: &String) -> String {
+fn invert(value: &str) -> String {
     value.chars().fold("".to_string(), |mut s, c| {
         let inv = if c == '1' {
             '0'
@@ -43,22 +43,19 @@ fn bit_criteria(mut input: Vec<String>, ch: char) -> String {
     while input.len() > 1 {
         let r = rank(&input, position);
 
-        input = input
-            .into_iter()
-            .filter(|a| {
-                let c = a.chars().nth(position).unwrap();
-                (r == 0 && c == ch)
-                    || (r > 0 && c == ch)
-                    || (r < 0
-                        && c == if ch == '1' {
-                            '0'
-                        } else if ch == '0' {
-                            '1'
-                        } else {
-                            panic!("Oh noes")
-                        })
-            })
-            .collect();
+        input.retain(|a| {
+            let c = a.chars().nth(position).unwrap();
+            (r == 0 && c == ch)
+                || (r > 0 && c == ch)
+                || (r < 0
+                    && c == if ch == '1' {
+                        '0'
+                    } else if ch == '0' {
+                        '1'
+                    } else {
+                        panic!("Oh noes")
+                    })
+        });
         position += 1;
     }
     assert!(input.len() == 1);
@@ -71,22 +68,24 @@ mod tests {
 
     #[test]
     fn test() {
-        let a = vec![
+        let input = [
             "00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000",
             "11001", "00010", "01010",
-        ]
-        .iter()
-        .map(|s| s.to_string())
-        .collect();
+        ];
 
-        assert!(rank(&a, 0) > 0);
-        assert!(rank(&a, 1) < 0);
-        assert!(rank(&a, 2) > 0);
-        assert!(rank(&a, 3) > 0);
-        assert!(rank(&a, 4) < 0);
+        let strings = input
+            .iter()
+            .map(|&s: &&str| s.into())
+            .collect::<Vec<_>>();
+
+        assert!(rank(&strings, 0) > 0);
+        assert!(rank(&strings, 1) < 0);
+        assert!(rank(&strings, 2) > 0);
+        assert!(rank(&strings, 3) > 0);
+        assert!(rank(&strings, 4) < 0);
 
         let gamma = (0..5).fold("".to_string(), |mut g, position| {
-            g.push(to_char(rank(&a, position)));
+            g.push(to_char(rank(&strings, position)));
             g
         });
         assert_eq!(gamma, "10110");
@@ -96,9 +95,9 @@ mod tests {
         let power = multiply_radix_2(&gamma, &epsilon);
         assert_eq!(power, 198);
 
-        let o = bit_criteria(a.clone(), '1');
+        let o = bit_criteria(strings.clone(), '1');
         assert_eq!(o, "10111");
-        let c = bit_criteria(a.clone(), '0');
+        let c = bit_criteria(strings.clone(), '0');
         assert_eq!(c, "01010");
     }
 }
@@ -113,8 +112,8 @@ fn part1() {
     let epsilon = invert(&gamma);
     let power = multiply_radix_2(&gamma, &epsilon);
 
-    print!(
-        "Day 3 part 1 : Gamma: {} Epsilon: {} Power: {}\n",
+    println!(
+        "Day 3 part 1 : Gamma: {} Epsilon: {} Power: {}",
         gamma, epsilon, power
     );
 }
@@ -126,8 +125,8 @@ fn part2() {
     let c = bit_criteria(input.clone(), '0');
     let l = multiply_radix_2(&o, &c);
 
-    print!(
-        "Day 3 part 2 : Oxygen rating: {} CO2 scrubber rating: {} Life support rating: {}\n",
+    println!(
+        "Day 3 part 2 : Oxygen rating: {} CO2 scrubber rating: {} Life support rating: {}",
         o, c, l
     );
 }

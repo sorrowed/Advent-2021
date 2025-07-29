@@ -62,7 +62,7 @@ fn termial(d: i32) -> i32 {
     (d * d + d) / 2
 }
 
-fn range(v: &Vec<i32>) -> std::ops::RangeInclusive<i32> {
+fn range(v: &[i32]) -> std::ops::RangeInclusive<i32> {
     *v.iter().min().unwrap()..=*v.iter().max().unwrap()
 }
 
