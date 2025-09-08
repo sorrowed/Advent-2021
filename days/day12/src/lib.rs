@@ -24,11 +24,11 @@ impl Cave {
         }
     }
 
-    pub fn end() -> Cave {
-        Cave {
-            name: "start".to_string(),
-        }
-    }
+    // pub fn end() -> Cave {
+    //     Cave {
+    //         name: "start".to_string(),
+    //     }
+    // }
 
     pub fn is_start(&self) -> bool {
         self.name == *"start"
