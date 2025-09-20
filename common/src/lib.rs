@@ -1,5 +1,10 @@
 use std::{collections::HashMap, fs};
 
+use num::{
+    integer::{sqrt, Roots},
+    Integer,
+};
+
 pub fn import(name: &str) -> Vec<String> {
     fs::read_to_string(name)
         .unwrap()
@@ -8,7 +13,7 @@ pub fn import(name: &str) -> Vec<String> {
         .collect()
 }
 
-#[derive(PartialEq, Eq, Hash, Clone, Copy)]
+#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
 pub struct Coordinate<T> {
     pub x: T,
     pub y: T,
@@ -20,6 +25,8 @@ where
     T: num::Signed,
     T: Copy,
     T: std::cmp::PartialOrd,
+    T: Integer,
+    T: Roots,
 {
     pub fn new(x: T, y: T, z: T) -> Coordinate<T> {
         Coordinate { x, y, z }
@@ -27,6 +34,14 @@ where
 
     pub fn manhattan(&self, other: &Self) -> T {
         (self.x - other.x).abs() + (self.y - other.y).abs() + (self.z - other.z).abs()
+    }
+
+    pub fn crow(&self, other: &Self) -> T {
+        let dx = self.x - other.x;
+        let dy = self.y - other.y;
+        let dz = self.z - other.z;
+
+        sqrt(dx * dx + dy * dy + dz * dz)
     }
 
     pub fn offset(&self, x: T, y: T, z: T) -> Self {

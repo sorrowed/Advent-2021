@@ -115,6 +115,7 @@ fn part2() {
         counts.iter().max_by_key(|e| e.1).unwrap().1,
     );
 
+    assert_eq!(max - min, 2432786807053);
     println!("Day 14 part 2 : {}", max - min);
 }
 
